@@ -15,16 +15,23 @@
       },
       {
         "id": 3,
-        "title": "ささやかな息吹",
-        "artist": "メガミノウタゲ,kyiku,Flare Rune",
+        "title": "メモリー",
+        "artist": "kyiku,可不,ナースロボ_タイプT",
         "cover": "/covers/cover3.jpg",
-        "url": "/music/music3.flac"
+        "url": "/music/music3.mp3"
       },
       {
         "id": 4,
-        "title": "hundreds",
-        "artist": "Le chat Ilan",
+        "title": "プレイボ一ル!~目指せ!満塁ホ一ムラン~",
+        "artist": "EmoCosine",
         "cover": "/covers/cover4.jpg",
-        "url": "/music/music4.flac"
+        "url": "/music/music4.ogg"
+      },
+      {
+        "id": 5,
+        "title": "iiyo",
+        "artist": "23.exe",
+        "cover": "/covers/cover5.png",
+        "url": "/music/music5.mp3"
       }
 ]

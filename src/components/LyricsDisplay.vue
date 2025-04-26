@@ -67,7 +67,7 @@ export default {
 
                 // 计算相对滚动位置
                 const relativePosition = elementRect.top - containerRect.top
-                const targetScroll = container.scrollTop + relativePosition - (containerRect.height / 2.5) + (elementRect.height / 2)
+                const targetScroll = container.scrollTop + relativePosition - (containerRect.height / 3) + (elementRect.height / 3)
 
                 const maxScroll = container.scrollHeight - containerRect.height
                 const finalScroll = Math.max(0, Math.min(targetScroll, maxScroll))

@@ -20,7 +20,7 @@
     flex-direction: column;
     width: 100%;
     background: white;
-    max-height: 240px;
+    max-height: 40%;
     overflow-y: auto;
     scroll-behavior: smooth;
     scrollbar-width: none;
@@ -90,7 +90,15 @@
       width: calc(var(--indicator-width) - 1px);
     }
   }
-
+  @media (max-width: 1550px),(max-height: 650px) {
+    .playlist {
+      max-height: 200px;
+      height: 25vh;
+      overflow-y: auto;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+  }
   .playlist-item.disabled {
     opacity: 0.6;
     cursor: not-allowed;

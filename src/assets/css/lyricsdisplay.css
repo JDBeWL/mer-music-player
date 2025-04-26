@@ -23,7 +23,8 @@
 }
 
 .lyrics.active {
-    transform: translateX(10px) scale(1.05);
+    transform: translateX(5px) scale(1.2);
+    border-radius: 16px;
     font-weight: bold;
     color: #2196f3;
     background: rgba(43, 174, 210, 0.1);
