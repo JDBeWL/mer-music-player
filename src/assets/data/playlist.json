@@ -1,0 +1,30 @@
+[
+    {
+      "id": 1,
+      "title": "∞",
+      "artist": "オグリキャップ (CV.高柳知葉)",
+      "cover": "/covers/cover1.jpg",
+      "url": "/music/music1.flac"
+    },
+    {
+        "id": 2,
+        "title": "我是，女孩。",
+        "artist": "停電前夜",
+        "cover": "/covers/cover2.jpg",
+        "url": "/music/music2.flac"
+      },
+      {
+        "id": 3,
+        "title": "ささやかな息吹",
+        "artist": "メガミノウタゲ,kyiku,Flare Rune",
+        "cover": "/covers/cover3.jpg",
+        "url": "/music/music3.flac"
+      },
+      {
+        "id": 4,
+        "title": "hundreds",
+        "artist": "Le chat Ilan",
+        "cover": "/covers/cover4.jpg",
+        "url": "/music/music4.flac"
+      }
+]

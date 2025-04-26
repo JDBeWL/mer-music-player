@@ -1,0 +1,122 @@
+:root {
+    --active-bg: #e8e8ff;
+    --hover-bg: #f8f8f8;
+    --border-color: #ccc;
+    --accent-color: #2196F3;
+    --indicator-width: 3px;
+    --item-padding: 12px;
+    --mobile-padding: 8px;
+    --min-height: 35px;
+    --mobile-height: 30px;
+  }
+  
+  .playlist {
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    list-style: none;
+    padding: 2px;
+    margin: 2px;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    background: white;
+    max-height: 240px;
+    overflow-y: auto;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  
+
+  .playlist-item {
+    padding: var(--item-padding);
+    cursor: pointer;
+    transition: 
+      background 0.3s ease,
+      transform 0.1s ease;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #eee;
+    min-height: var(--min-height);
+    max-width: 306px;
+    position: relative;
+    background: transparent;
+    min-height: 52px;
+    margin: 2px 0px;
+  }
+  
+
+  .playlist-item:last-child {
+    border-bottom: none;
+  }
+  
+
+  .playlist-item:hover {
+    background: var(--hover-bg);
+  }
+  
+
+  .playlist-item:active {
+    transform: scale(0.98);
+  }
+  
+
+  .playlist-item.active {
+    background: var(--active-bg);
+    font-weight: 500;
+  }
+  
+
+  .playlist-item.active::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: var(--indicator-width);
+    background: var(--accent-color);
+    transition: width 0.2s ease;
+  }
+  
+
+  @media (max-width: 480px) {
+    .playlist-item {
+      padding: var(--mobile-padding);
+      min-height: var(--mobile-height);
+      max-width: 100%;
+    }
+    
+    .playlist-item.active::after {
+      width: calc(var(--indicator-width) - 1px);
+    }
+  }
+
+  .playlist-item.disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    background: #f9f9f9;
+  }
+  
+  .loading-indicator {
+    width: 16px;
+    height: 16px;
+    margin-left: 8px;
+    border: 2px solid #ddd;
+    border-top-color: #2196F3;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+  
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+  @keyframes loadingPulse {
+    0% { background: #f5f5f5; }
+    50% { background: #e0e0e0; }
+    100% { background: #f5f5f5; }
+  }
+  
+  .playlist-item.loading {
+    animation: loadingPulse 1.5s infinite;
+    pointer-events: none;
+  }
