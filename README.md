@@ -35,7 +35,8 @@ music-player/
 ├── public/                # 静态资源
 ├── src/
 │   ├── assets/            # 全局资源文件
-│   │   ├── css  # 播放器样式
+│   │   ├── css                 # 播放器样式
+│   │   ├── data                # 数据
 │   ├── components/        # 组件
 │   │   ├── PlayerControls.vue  # 播放控制组件
 │   │   ├── Playlist.vue        # 播放列表组件
@@ -59,6 +60,7 @@ music-player/
 按照上面的项目结构可以快速完成对于播放器的快速开发和添加到其他项目中。
 
 可以通过控制不同Vue组件和CSS样式的渲染实现多种显示效果，能给用户提供显示效果。
+
 ## 构建与部署
 ```bash
 # 生产环境构建
@@ -77,4 +79,17 @@ pnpm/npm run dev
 
 # 部署项目
 netlify/github action:把你的项目提交到仓库或者将构建好的项目交给其发布
+```
+
+## 其他
+修改playlist.json中的内容并向public添加类似的内容即可预览出整个界面的效果。
+格式如下
+```json
+  {
+    "id": 1,     // id编号
+    "title": "", // 曲名
+    "artist": "",// 作者
+    "cover": "", // 封面
+    "url": ""    // 音乐源
+  },
 ```

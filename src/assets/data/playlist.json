@@ -1,37 +1,44 @@
 [
-    {
-      "id": 1,
-      "title": "∞",
-      "artist": "オグリキャップ (CV.高柳知葉)",
-      "cover": "/covers/cover1.jpg",
-      "url": "/music/music1.flac"
-    },
-    {
-        "id": 2,
-        "title": "我是，女孩。",
-        "artist": "停電前夜",
-        "cover": "/covers/cover2.jpg",
-        "url": "/music/music2.flac"
-      },
-      {
-        "id": 3,
-        "title": "メモリー",
-        "artist": "kyiku,可不,ナースロボ_タイプT",
-        "cover": "/covers/cover3.jpg",
-        "url": "/music/music3.mp3"
-      },
-      {
-        "id": 4,
-        "title": "プレイボ一ル!~目指せ!満塁ホ一ムラン~",
-        "artist": "EmoCosine",
-        "cover": "/covers/cover4.jpg",
-        "url": "/music/music4.ogg"
-      },
-      {
-        "id": 5,
-        "title": "iiyo",
-        "artist": "23.exe",
-        "cover": "/covers/cover5.png",
-        "url": "/music/music5.mp3"
-      }
+  {
+    "id": 1,
+    "title": "∞",
+    "artist": "オグリキャップ (CV.高柳知葉)",
+    "cover": "/covers/cover1.jpg",
+    "url": "/music/music1.flac"
+  },
+  {
+    "id": 2,
+    "title": "我是，女孩。",
+    "artist": "停電前夜",
+    "cover": "/covers/cover2.jpg",
+    "url": "/music/music2.flac"
+  },
+  {
+    "id": 3,
+    "title": "メモリー",
+    "artist": "kyiku,可不,ナースロボ_タイプT",
+    "cover": "/covers/cover3.jpg",
+    "url": "/music/music3.mp3"
+  },
+  {
+    "id": 4,
+    "title": "プレイボ一ル!~目指せ!満塁ホ一ムラン~",
+    "artist": "EmoCosine",
+    "cover": "/covers/cover4.jpg",
+    "url": "https://prod-clientpatch.bluearchiveyostar.com/r79_swwin27e1u6czsvrxshi_2/MediaResources/GameData/Audio/BGM/Theme_250.ogg"
+  },
+  {
+    "id": 5,
+    "title": "iiyo",
+    "artist": "23.exe",
+    "cover": "/covers/cover5.png",
+    "url": "https://api.oick.cn/wyy/api.php?id=1501447956"
+  },
+  {
+    "id": 6,
+    "title": "所以我伸出了手 Feat.星尘",
+    "artist": "Evalia/Creuzer/星尘",
+    "cover": "https://p2.music.126.net/JY-NJQtf-UQvo6JBDF3XGg==/109951170379791866.jpg",
+    "url": "https://api.oick.cn/wyy/api.php?id=2666293061"
+  }
 ]

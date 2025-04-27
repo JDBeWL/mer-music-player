@@ -20,7 +20,7 @@
     flex-direction: column;
     width: 100%;
     background: white;
-    min-height: 30%;
+    min-height: 10%;
     max-height: 40%;
     overflow-y: auto;
     scroll-behavior: smooth;
