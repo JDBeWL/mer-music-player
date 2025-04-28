@@ -1,14 +1,7 @@
 <template>
   <div class="progress-container">
     <span>{{ formattedCurrentTime }}</span>
-    <input 
-      ref="progressInput"
-      type="range" 
-      :max="duration" 
-      :value="currentTime" 
-      @input="seek"
-      class="progress-bar"
-    />
+    <input ref="progressInput" type="range" :max="duration" :value="currentTime" @input="seek" class="progress-bar" />
     <span>{{ formattedDuration }}</span>
   </div>
 </template>
@@ -29,8 +22,8 @@ onMounted(async () => {
 const duration = computed(() => store.duration)
 const currentTime = computed(() => store.currentTime)
 const progressPercentage = computed(() => {
-  return duration.value > 0 
-    ? (currentTime.value / duration.value) * 100 
+  return duration.value > 0
+    ? (currentTime.value / duration.value) * 100
     : 0
 })
 

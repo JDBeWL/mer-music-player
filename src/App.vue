@@ -34,7 +34,7 @@ import PlayerControls from "@/components/PlayerControls.vue";
 import AudioPlayer from "@/components/AudioPlayer.vue";
 import LyricsDisplay from "@/components/LyricsDisplay.vue";
 const store = usePlayerStore();
-import "@/assets/css/player.css";
+import "@/assets/css/container.css";
 // 计算当前歌曲
 const currentSong = computed(() => store.currentSong);
 const hasLyrics = computed(() => {
@@ -42,6 +42,4 @@ const hasLyrics = computed(() => {
 })
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

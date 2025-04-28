@@ -1,12 +1,7 @@
 <template>
-  <audio
-    ref="audioElement"
-    :src="currentSong?.url"
-    :type="currentSong?.url.endsWith('.flac') ? 'audio/flac' : 'audio/mpeg'"
-    @timeupdate="updateTime"
-    @ended="handleSongEnd"
-    @loadedmetadata="setDuration"
-  />
+  <audio ref="audioElement" :src="currentSong?.url"
+    :type="currentSong?.url.endsWith('.flac') ? 'audio/flac' : 'audio/mpeg'" @timeupdate="updateTime"
+    @ended="handleSongEnd" @loadedmetadata="setDuration" />
 </template>
 
 <script setup>
@@ -32,11 +27,11 @@ watch(() => store.currentSong, async (newSong, oldSong) => {
     try {
       audioElement.value.pause()
       audioElement.value.currentTime = 0
-      
+
       // 强制重新加载音频源
       audioElement.value.src = newSong.url
       await audioElement.value.load()
-      
+
       // 添加ready状态监听
       const playWhenReady = () => {
         audioElement.value.removeEventListener('canplay', playWhenReady)
@@ -46,7 +41,7 @@ watch(() => store.currentSong, async (newSong, oldSong) => {
           })
         }
       }
-      
+
       if (audioElement.value.readyState > 3) {
         playWhenReady()
       } else {
@@ -79,7 +74,7 @@ onMounted(() => {
     console.error("播放列表未加载！");
   }
   store.registerAudioElement(audioElement.value);
-  
+
   watch(
     () => store.currentTime,
     (newTime) => {

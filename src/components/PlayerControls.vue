@@ -20,6 +20,7 @@ import { computed } from 'vue'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faPlay, faPause, faForwardStep, faBackwardStep } from '@fortawesome/free-solid-svg-icons'
+import "@/assets/css/player-controls.css"
 
 library.add(faPlay, faPause, faForwardStep, faBackwardStep)
 
@@ -31,38 +32,4 @@ const prevSong = () => store.prevSong()
 const isPlaying = computed(() => store.isPlaying)
 </script>
 
-<style>
-.controls {
-  display: flex;
-  gap: 20px;
-  justify-content: center;
-  /* margin-top: 20px; */
-}
-
-button {
-  padding: 12px;
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: #2c3e50;
-  transition: transform 0.2s;
-}
-
-button:hover {
-  transform: scale(1.1);
-}
-
-svg {
-  width: 24px;
-  height: 24px;
-}
-.pulse {
-  animation: pulse 1.5s infinite;
-}
-
-@keyframes pulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.1); }
-  100% { transform: scale(1); }
-}
-</style>
+<style></style>

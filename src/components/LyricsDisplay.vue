@@ -15,7 +15,7 @@
 <script>
 import { usePlayerStore } from '@/stores/player'
 import { nextTick, ref, watchEffect, onMounted, onUnmounted } from 'vue'
-import "@/assets/css/lyricsdisplay.css"
+import "@/assets/css/lyrics-display.css"
 
 export default {
     name: "LyricsDisplay",

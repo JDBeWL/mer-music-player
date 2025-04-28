@@ -6,7 +6,7 @@
 </template>
 
 <script setup>
-import('@/assets/css/albumart.css')
+import('@/assets/css/album-art.css')
 defineProps({
   src: String
 })

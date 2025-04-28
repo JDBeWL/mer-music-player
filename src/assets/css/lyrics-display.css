@@ -14,8 +14,9 @@
 
 .lyrics {
     margin: 6px 0;
-    padding: 10px;
-    transition: all 0.3s ease;
+    padding: 9px;
+    font-size: 18px;
+    transition: all 0.18s ease;
     transform-origin: left center;
     word-break: break-word;
     max-width: 100%;
@@ -23,8 +24,9 @@
 }
 
 .lyrics.active {
-    transform: translateX(5px) scale(1.2);
-    border-radius: 16px;
+    transform: translateX(4px) scale(1.1);
+    border-radius: 12px;
+    font-size: 20px;
     font-weight: bold;
     color: #2196f3;
     background: rgba(43, 174, 210, 0.1);

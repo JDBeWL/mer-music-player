@@ -1,6 +1,6 @@
 :root {
     --active-bg: #e8e8ff;
-    --hover-bg: #f8f8f8;
+    --hover-bg: #f0f0f0;
     --border-color: #ccc;
     --accent-color: #2196F3;
     --indicator-width: 3px;
@@ -12,16 +12,16 @@
   
   .playlist {
     border: 1px solid var(--border-color);
-    border-radius: 5px;
+    border-radius: 6px;
     list-style: none;
     padding: 2px;
     margin: 2px;
     display: flex;
     flex-direction: column;
     width: 100%;
-    background: white;
+    background: #f8f8f8;
     min-height: 10%;
-    max-height: 40%;
+    max-height: var(--max-height);
     overflow-y: auto;
     scroll-behavior: smooth;
     scrollbar-width: none;
@@ -39,10 +39,10 @@
     align-items: center;
     border-bottom: 1px solid #eee;
     min-height: var(--min-height);
-    max-width: 306px;
+    max-width: 300px;
     position: relative;
     background: transparent;
-    min-height: 52px;
+    min-height: 54px;
     margin: 2px 0px;
   }
   
@@ -83,7 +83,7 @@
   @media (max-width: 480px) {
     .playlist-item {
       padding: var(--mobile-padding);
-      min-height: var(--mobile-height);
+      min-height: var(--mobile-height + 2rem);
       max-width: 100%;
     }
     
@@ -91,9 +91,9 @@
       width: calc(var(--indicator-width) - 1px);
     }
   }
-  @media (max-width: 1550px),(max-height: 650px) {
+  @media (max-width: 800px),(max-height: 40rem)  {
     .playlist {
-      max-height: 200px;
+      max-height: 10rem;
       height: 25vh;
       overflow-y: auto;
       scrollbar-width: none;
