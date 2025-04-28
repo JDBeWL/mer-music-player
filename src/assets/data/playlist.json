@@ -40,5 +40,18 @@
     "artist": "Evalia/Creuzer/星尘",
     "cover": "https://p2.music.126.net/JY-NJQtf-UQvo6JBDF3XGg==/109951170379791866.jpg",
     "url": "https://api.oick.cn/wyy/api.php?id=2666293061"
+  },
+  {
+    "id": 7,
+    "title": "冴ゆる青",
+    "artist": "瀬名航",
+    "cover": "https://p2.music.126.net/XaRf6-c370tlR5FSTLTPpQ==/109951170169095462.jpg",
+    "url": "https://api.oick.cn/wyy/api.php?id=2648166069"
+  },{
+    "id": 8,
+    "title":"Take a Walk (A Cappella)",
+    "artist": "AaronicStuff",
+    "cover": "https://p1.music.126.net/BvMt-QCmbIxT39I56308ug==/7995648557843677.jpg",
+    "url": "https://api.oick.cn/wyy/api.php?id=32807378"
   }
 ]

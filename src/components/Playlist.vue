@@ -1,16 +1,10 @@
 <template>
   <div class="playlist">
-    <div 
-      v-for="song in playlist" 
-      :key="song.id" 
-      @click="selectSong(song)"
-      :class="{ 
-        'playlist-item': true,
-        'active': song.id === currentSong?.id,
-        'loading': song.loading 
-      }"
-      ref="songItems"
-    >
+    <div v-for="song in playlist" :key="song.id" @click="selectSong(song)" :class="{
+      'playlist-item': true,
+      'active': song.id === currentSong?.id,
+      'loading': song.loading
+    }" ref="songItems">
       {{ song.title }} - {{ song.artist }}
       <div v-if="song.loading" class="loading-indicator"></div>
     </div>
@@ -39,14 +33,14 @@ const selectSong = async (song) => {
   if (song.disabled) return
   store.currentSong = song
   store.isPlaying = true
-  
+
   await nextTick()
-  const activeItem = songItems.value.find(item => 
+  const activeItem = songItems.value.find(item =>
     item.classList.contains('active')
   )
-  
+
   if (activeItem) {
-    activeItem.scrollIntoView({ 
+    activeItem.scrollIntoView({
       behavior: 'smooth',
       block: 'nearest'
     })
@@ -54,6 +48,4 @@ const selectSong = async (song) => {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

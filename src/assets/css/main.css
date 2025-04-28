@@ -14,22 +14,3 @@
     padding: 0 0 0 0;
     justify-content: center;
   }
-  
-  button {
-    /* background: #3c5368; */
-    color: rgb(0, 0, 0);
-    border: none;
-    padding: 12px 24px;
-    border-radius: 25px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    font-size: 1.2rem;
-  }
-  
-  button:hover {
-    background: #2196F3;
-    transform: translateY(-2px);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-  }
-  
-

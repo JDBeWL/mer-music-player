@@ -1,7 +1,8 @@
 .main-container {
   display: grid;
-  grid-template-columns: minmax(100px, 400px) minmax(1100px, 1fr);
+  grid-template-columns: minmax(5rem, 25rem) minmax(30rem, 70rem);
   padding: 0;
+  margin: 0 1rem;
   /* margin-top: 2rem; */
   min-height: 100vh;
   align-items: start;
@@ -10,8 +11,10 @@
 }
 
 .player-container {
-  width: 350px;
-  margin: 54px 0;
+  width: min(90vw, 350px);
+  height: calc(100vh - 6rem);
+  min-height: 35.5rem;
+  margin: 3rem 0;
   padding: 20px;
   background: #f5f5f5;
   border-radius: 15px;
@@ -22,16 +25,19 @@
   flex-direction: column;
   transition: all 0.3s ease;
   gap: 1rem;
-  height: calc(100vh - 7rem);
+  z-index: 1;
 }
 
 .lyrics-container {
   position: sticky;
-  top: 3.5rem;
-  height: calc(100vh - 7rem); 
+  margin-top: 3rem;
+  height: calc(100vh - 6rem); 
+  min-height: 35.5rem;
+  width: 100%;
+  min-width: 30rem;
   display: flex;
   flex-direction: column;
-  padding: 1.8rem;
+  padding: 1.25rem 2rem 1.8rem 1.25rem;
   background: #f5f5f5;
   border-radius: 15px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -47,14 +53,15 @@
 .lyrics-container::-webkit-scrollbar {
   width: 0;
   height: 0; 
-  background: transparent;
+  background: transparent; /* Hide scrollbar */
 }
 
-@media (max-width: 1550px),(max-height: 650px) {
+@media (max-width: 800px),(max-height: 35.4rem) {
   .main-container {
     grid-template-columns: 1fr;
-    padding: 1rem;
-    gap: 1.5rem;
+    
+    margin-top: 5vw;
+    /* gap: 0.5rem; */
   }
 
   .player-container {
@@ -65,10 +72,11 @@
   }
 
   .lyrics-container {
-    padding-right: 1rem;
-    overflow-x: hidden;
-    /* width: calc(100% - 0.3rem); */
-    max-width: 352px;
+    position: static;
+    min-width: unset; 
+    width: min(90vw, 350px);
+    max-width: 100%;
+    margin-left: 0; 
   }
 }
 

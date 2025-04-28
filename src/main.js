@@ -10,7 +10,7 @@ const pinia = createPinia()
 app.use(pinia)
 
 // 初始化方式
-const playerStore = usePlayerStore() 
-playerStore.initialize(demoPlaylist) 
+const playerStore = usePlayerStore()
+playerStore.initialize(demoPlaylist)
 
 app.mount('#app')
