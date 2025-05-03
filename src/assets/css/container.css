@@ -3,7 +3,6 @@
   grid-template-columns: minmax(5rem, 25rem) minmax(30rem, 70rem);
   padding: 0;
   margin: 0 1rem;
-  /* margin-top: 2rem; */
   min-height: 100vh;
   align-items: start;
   width: fit-content;

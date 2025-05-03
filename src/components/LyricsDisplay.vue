@@ -24,9 +24,9 @@
 </template>
 
 <script>
-import { usePlayerStore } from "@/stores/player";
-import { nextTick, ref, watchEffect, onMounted, onUnmounted } from "vue";
-import "@/assets/css/lyrics-display.css";
+import { usePlayerStore } from '@/stores/player'
+import { nextTick, ref, watchEffect, onMounted, onUnmounted } from 'vue'
+import "@/assets/css/lyrics-display.css"
 
 export default {
     name: "LyricsDisplay",
