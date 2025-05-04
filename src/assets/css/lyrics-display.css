@@ -22,11 +22,10 @@
     max-width: 100%;
     min-height: 1.2em;
 }
-
 .lyrics.active {
     transform: translateX(4px) scale(1.1);
     border-radius: 12px;
-    font-size: 20px;
+    font-size: 18px;
     font-weight: bold;
     color: #2196f3;
     background: rgba(43, 174, 210, 0.1);
@@ -39,9 +38,27 @@
     line-height: 1.6;
     padding: 4px 0;
 }
-
 .lyrics.active p {
     color: #2baed2;
+}
+
+.lyrics .english {
+    font-size: 1.1em;
+    /* margin-bottom: 4px; */
+}
+.lyrics .chinese {
+    font-size: 0.9em;
+    /* color: #888; */
+    /* margin-top: 4px; */
+}
+
+.lyrics.active .english {
+    color: #2baed2;
+    font-size: 1.1em;
+}
+.lyrics.active .chinese {
+    color: #2baed2;
+    font-size: 1em;
 }
 
 .lyrics-display {
@@ -63,23 +80,10 @@
 }
 
 .karaoke-text {
-    background: linear-gradient(
-        90deg,
-        #2baed2 var(--karaoke-progress, 0%),
-        #888 var(--karaoke-progress, 0%)
-    );
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    transition: --karaoke-progress 0.2s linear;
+    color: #888;
+    transition: color 0.2s linear;
+}
+.karaoke-text.active {
+    color: #2baed2;
 }
 
-@property --karaoke-progress {
-    syntax: '<percentage>';
-    inherits: false;
-    initial-value: 0%;
-}
-
-.lyrics.active .karaoke-text {
-    color: transparent;
-}

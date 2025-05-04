@@ -9,5 +9,17 @@ export default defineConfig({
       '@': fileURLToPath(new URL('./src', import.meta.url)),
     },
     extensions: ['.js', '.vue'] 
-  }
+  },
+  server: {
+    // 阻止对lyrics目录的history回退
+    historyApiFallback: {
+        disableDotRule: true,
+        rewrites: [
+            {
+                from: /^\/lyrics\/.*/,
+                to: (context) => context.parsedUrl.pathname.endsWith('.html') ? '/index.html' : null
+            }
+        ]
+    }
+}
 })

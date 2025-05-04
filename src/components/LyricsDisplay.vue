@@ -4,18 +4,24 @@
             <div v-if="loading" class="loading">加载歌词中...</div>
             <div v-else-if="!lyrics.length" class="no-lyrics">暂无歌词</div>
             <div v-else>
-                <div class="lyrics" v-for="(line, index) in lyrics" :key="index" :class="{ active: isActive(index) }">
+                <div class="lyrics" v-for="(line, index) in lyrics" :key="index" 
+                     :class="{ active: isActive(index) }">
                     <template v-if="line.karaoke && isActive(index)">
-                        <p v-for="(text, idx) in line.texts" :key="idx">
-                            <span class="karaoke-text" :style="getKaraokeStyle(line, text)">
-                                {{ text }}
+                        <!-- 英文卡拉OK部分 -->
+                        <p class="english">
+                            <span v-for="(word, idx) in line.words" :key="idx"
+                                :class="['karaoke-text', { 'active': isWordActive(word) }]"
+                                :style="getASSKaraokeStyle(word)">
+                                {{ word.text }}
                             </span>
                         </p>
+                        <!-- 中文翻译部分 -->
+                        <p class="chinese" v-if="line.texts[1]">{{ line.texts[1] }}</p>
                     </template>
                     <template v-else>
-                        <p v-for="(text, idx) in line.texts" :key="idx">
-                            {{ text }}
-                        </p>
+                        <!-- 非激活状态显示双语 -->
+                        <p class="english">{{ line.texts[0] }}</p>
+                        <p class="chinese" v-if="line.texts[1]">{{ line.texts[1] }}</p>
                     </template>
                 </div>
             </div>
@@ -92,6 +98,91 @@ export default {
             return Object.values(resultMap).sort((a, b) => a.time - b.time);
         };
 
+        const parseASS = (assText) => {
+            const lines = assText.split('\n');
+            const dialogues = [];
+            
+            // 解析时间转换函数
+            const toSeconds = (t) => {
+                const [h, m, s] = t.split(':');
+                return parseInt(h) * 3600 + parseInt(m) * 60 + parseFloat(s);
+            };
+
+            // 收集所有对话行
+            for (const line of lines) {
+                if (!line.startsWith('Dialogue:')) continue;
+                const parts = line.split(',');
+                if (parts.length < 10) continue;
+
+                const start = parts[1].trim();
+                const end = parts[2].trim();
+                const style = parts[3].trim();
+                const text = parts.slice(9).join(',').trim();
+
+                dialogues.push({
+                    startTime: toSeconds(start),
+                    endTime: toSeconds(end),
+                    style,
+                    text
+                });
+            }
+
+            // 按时间分组合并双语
+            const groupedMap = new Map();
+            dialogues.forEach(d => {
+                const key = `${d.startTime.toFixed(3)}-${d.endTime.toFixed(3)}`;
+                if (!groupedMap.has(key)) {
+                    groupedMap.set(key, {
+                        startTime: d.startTime,
+                        endTime: d.endTime,
+                        texts: { orig: '', ts: '' },
+                        karaoke: null
+                    });
+                }
+                const group = groupedMap.get(key);
+                if (d.style === 'orig') group.texts.orig = d.text;
+                if (d.style === 'ts') group.texts.ts = d.text;
+            });
+
+            //解析卡拉OK并生成结果
+            const result = [];
+            groupedMap.forEach(group => {
+                // 解析英文卡拉OK
+                const parseKaraoke = (text) => {
+                    const karaokeTag = /{\\k[f]?(\d+)}([^{}]+)/g;
+                    let words = [];
+                    let accTime = group.startTime;
+                    let match;
+
+                    while ((match = karaokeTag.exec(text)) !== null) {
+                        const duration = match[0].includes('\\kf') 
+                            ? parseInt(match[1]) * 0.01 
+                            : parseInt(match[1]) * 0.1;
+                        words.push({
+                            text: match[2],
+                            start: accTime,
+                            end: accTime + duration
+                        });
+                        accTime += duration;
+                    }
+                    return words;
+                };
+
+                const enWords = parseKaraoke(group.texts.orig);
+                result.push({
+                    time: group.startTime,
+                    texts: [
+                        group.texts.orig.replace(/{.*?}/g, ''), // 英文
+                        group.texts.ts.replace(/{.*?}/g, '')    // 中文
+                    ],
+                    words: enWords,
+                    karaoke: enWords.length > 0
+                });
+            });
+
+            return result.sort((a, b) => a.time - b.time);
+        };
+
         const scrollToActiveLyric = (immediate = false) => {
             if (!containerRef.value || activeIndex.value === -1) return;
 
@@ -122,6 +213,7 @@ export default {
                 }
             });
         };
+
         const stopWatcher = watchEffect(() => {
             const ADVANCE_TIME = 0.2;
             const currentTime = playerStore.currentTime + ADVANCE_TIME;
@@ -156,15 +248,49 @@ export default {
         const loadLyrics = async (songTitle) => {
             try {
                 loading.value = true;
-                const fileName = encodeURIComponent(songTitle) + ".lrc";
-                const response = await fetch(`/lyrics/${fileName}`);
+                const baseName = encodeURIComponent(songTitle);
 
-                if (!response.ok) throw new Error("歌词不存在");
+                // HTML内容检测方法
+                const isInvalidContent = (text) => {
+                    const trimmed = text.trim();
+                    return trimmed.startsWith('<!doctype') ||
+                        trimmed.startsWith('<html') ||
+                        trimmed.includes('<div id="app">');
+                };
 
-                const lrcText = await response.text();
-                lyrics.value = parseLRC(lrcText);
+                // 尝试获取 ASS
+                let assText = "";
+                try {
+                    const response = await fetch(`/lyrics/${baseName}.ass`);
+                    if (response.ok) {
+                        assText = await response.text();
+                        if (assText && !isInvalidContent(assText)) {
+                            lyrics.value = parseASS(assText);
+                            nextTick(() => scrollToActiveLyric(true));
+                            return;
+                        }
+                    }
+                } catch (error) {
+                    console.warn("ASS请求异常:", error);
+                }
 
-                nextTick(() => scrollToActiveLyric(true));
+                // 尝试获取 LRC
+                try {
+                    const lrcResponse = await fetch(`/lyrics/${baseName}.lrc`);
+                    if (lrcResponse.ok) {
+                        const lrcText = await lrcResponse.text();
+                        if (!isInvalidContent(lrcText)) {
+                            lyrics.value = parseLRC(lrcText);
+                            nextTick(() => scrollToActiveLyric(true));
+                            return;
+                        }
+                    }
+                } catch (error) {
+                    console.warn("LRC请求异常:", error);
+                }
+
+                // 两个格式都失败
+                throw new Error("无有效歌词文件");
             } catch (error) {
                 console.warn("歌词加载失败:", error);
                 lyrics.value = [];
@@ -187,53 +313,12 @@ export default {
 
         const isActive = (index) => index === activeIndex.value;
 
-        // 卡拉OK支持
-        const getKaraokeStyle = (line, text) => {
-            if (!line.karaoke) return {};
-
-            const ADVANCE_TIME = 0.2;
-            const currentTime = playerStore.currentTime + ADVANCE_TIME;
-            const startTime = line.time;
-            let progress = 0;
-
-            // 获取当前时间对应的时间段
-            const timings = line.karaoke.timings;
-            let currentSegment = timings[0];
-            let nextSegment = timings[1];
-
-            for (let i = 0; i < timings.length - 1; i++) {
-                if (
-                    currentTime >= timings[i].time &&
-                    currentTime < timings[i + 1].time
-                ) {
-                    currentSegment = timings[i];
-                    nextSegment = timings[i + 1];
-                    break;
-                }
-            }
-
-            if (currentSegment && nextSegment) {
-                // 计算进度时也考虑提前量
-                const segmentDuration = nextSegment.time - currentSegment.time;
-                const adjustedTime = Math.min(currentTime, nextSegment.time);
-                const segmentProgress =
-                    (adjustedTime - currentSegment.time) / segmentDuration;
-                const clampedProgress = Math.max(0, Math.min(1, segmentProgress));
-
-                const charProgress =
-                    currentSegment.position +
-                    clampedProgress * (nextSegment.position - currentSegment.position);
-                progress = (charProgress / text.length) * 100;
-            } else if (currentTime >= timings[timings.length - 1]?.time) {
-                progress = 100;
-            }
-
-            progress = Math.max(0, Math.min(100, progress));
-
-            return {
-                "--karaoke-progress": `${progress}%`,
-            };
+        const isWordActive = (word) => {
+            const t = playerStore.currentTime;
+            return t >= word.start && t < word.end;
         };
+
+        const getASSKaraokeStyle = (word) => ({});
 
         return {
             lyrics,
@@ -241,7 +326,8 @@ export default {
             isActive,
             loading,
             containerRef,
-            getKaraokeStyle,
+            isWordActive,
+            getASSKaraokeStyle,
         };
     },
 };
