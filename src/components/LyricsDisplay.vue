@@ -4,24 +4,23 @@
             <div v-if="loading" class="loading">加载歌词中...</div>
             <div v-else-if="!lyrics.length" class="no-lyrics">暂无歌词</div>
             <div v-else>
-                <div class="lyrics" v-for="(line, index) in lyrics" :key="index" 
-                     :class="{ active: isActive(index) }">
+                <div class="lyrics" v-for="(line, index) in lyrics" :key="index" :class="{ active: isActive(index) }">
                     <template v-if="line.karaoke && isActive(index)">
-                        <!-- 英文卡拉OK部分 -->
-                        <p class="english">
+                        <!-- 卡拉OK -->
+                        <p class="first-line">
                             <span v-for="(word, idx) in line.words" :key="idx"
                                 :class="['karaoke-text', { 'active': isWordActive(word) }]"
                                 :style="getASSKaraokeStyle(word)">
                                 {{ word.text }}
                             </span>
                         </p>
-                        <!-- 中文翻译部分 -->
-                        <p class="chinese" v-if="line.texts[1]">{{ line.texts[1] }}</p>
+                        <!-- 翻译部分 -->
+                        <p class="last-line" v-if="line.texts[1]">{{ line.texts[1] }}</p>
                     </template>
                     <template v-else>
                         <!-- 非激活状态显示双语 -->
-                        <p class="english">{{ line.texts[0] }}</p>
-                        <p class="chinese" v-if="line.texts[1]">{{ line.texts[1] }}</p>
+                        <p class="first-line" v-if="line.texts[0]">{{ line.texts[0] }}</p>
+                        <p class="last-line" v-if="line.texts[1]">{{ line.texts[1] }}</p>
                     </template>
                 </div>
             </div>
@@ -101,7 +100,7 @@ export default {
         const parseASS = (assText) => {
             const lines = assText.split('\n');
             const dialogues = [];
-            
+
             // 解析时间转换函数
             const toSeconds = (t) => {
                 const [h, m, s] = t.split(':');
@@ -147,7 +146,7 @@ export default {
             //解析卡拉OK并生成结果
             const result = [];
             groupedMap.forEach(group => {
-                // 解析英文卡拉OK
+                // 解析卡拉OK
                 const parseKaraoke = (text) => {
                     const karaokeTag = /{\\k[f]?(\d+)}([^{}]+)/g;
                     let words = [];
@@ -155,8 +154,8 @@ export default {
                     let match;
 
                     while ((match = karaokeTag.exec(text)) !== null) {
-                        const duration = match[0].includes('\\kf') 
-                            ? parseInt(match[1]) * 0.01 
+                        const duration = match[0].includes('\\kf')
+                            ? parseInt(match[1]) * 0.01
                             : parseInt(match[1]) * 0.1;
                         words.push({
                             text: match[2],
@@ -172,8 +171,8 @@ export default {
                 result.push({
                     time: group.startTime,
                     texts: [
-                        group.texts.orig.replace(/{.*?}/g, ''), // 英文
-                        group.texts.ts.replace(/{.*?}/g, '')    // 中文
+                        group.texts.orig.replace(/{.*?}/g, ''), //歌词
+                        group.texts.ts.replace(/{.*?}/g, '')    //翻译
                     ],
                     words: enWords,
                     karaoke: enWords.length > 0
@@ -258,7 +257,7 @@ export default {
                         trimmed.includes('<div id="app">');
                 };
 
-                // 尝试获取 ASS
+                // 尝试获取ASS
                 let assText = "";
                 try {
                     const response = await fetch(`/lyrics/${baseName}.ass`);
@@ -274,7 +273,7 @@ export default {
                     console.warn("ASS请求异常:", error);
                 }
 
-                // 尝试获取 LRC
+                // 尝试获取LRC
                 try {
                     const lrcResponse = await fetch(`/lyrics/${baseName}.lrc`);
                     if (lrcResponse.ok) {
@@ -315,10 +314,23 @@ export default {
 
         const isWordActive = (word) => {
             const t = playerStore.currentTime;
-            return t >= word.start && t < word.end;
+            return (t >= word.start && t < word.end) || (t >= word.end);
         };
 
-        const getASSKaraokeStyle = (word) => ({});
+        const getASSKaraokeStyle = (word) => {
+            const t = playerStore.currentTime;
+            // 如果当前时间超过单词结束时间，保持100%进度
+            if (t >= word.end) {
+                return { '--progress': '100%' };
+            }
+            // 如果当前时间在单词时间范围内，计算进度百分比
+            else if (t >= word.start) {
+                const progress = ((t - word.start) / (word.end - word.start)) * 100;
+                return { '--progress': `${progress}%` };
+            }
+            // 如果还未到单词时间，进度为0
+            return { '--progress': '0%' };
+        };
 
         return {
             lyrics,

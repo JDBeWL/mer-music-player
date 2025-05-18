@@ -14,7 +14,7 @@
 
 .lyrics {
     margin: 6px 0;
-    padding: 9px;
+    padding: 12px 20px 12px 12px;
     font-size: 18px;
     transition: all 0.18s ease;
     transform-origin: left center;
