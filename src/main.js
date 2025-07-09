@@ -62,7 +62,7 @@ async function initApp() {
     console.error("初始化播放列表失败:", error);
     // 失败时尝试从本地加载（作为备选方案）
     try {
-      const response = await fetch("/src/assets/data/playlist.json");
+      const response = await fetch("/data/playlist.json");
       if (!response.ok)
         throw new Error(`加载playlist.json失败: ${response.status}`);
 
