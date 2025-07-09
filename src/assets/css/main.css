@@ -1,0 +1,16 @@
+/* 基础重置 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', sans-serif;
+  }
+  
+  body {
+    background: #e0e0e0;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding: 0 0 0 0;
+    justify-content: center;
+  }
