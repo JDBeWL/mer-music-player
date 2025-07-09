@@ -11,13 +11,14 @@
 - [开发](#开发)
 - [构建与部署](#构建与部署)
 
-### 当前存在的问题
-
-在解决完显示封面的逻辑后没有解决封面提取的问题，将使用之后引入的后端尝试解决
-
 ### 环境要求
 - Node.js ≥18.x
 - npm ≥9.6.x
+
+> 如果需要使用本地后端部署测试，推荐环境如下
+- JDK >= 21
+- Maven >= 3.9.9
+- PostgreSQL >= 16
 
 ### 安装步骤
 ```bash
@@ -25,7 +26,7 @@
 git clone https://github.com/jdbewl/mer-music-player.git
 
 # 进入项目目录
-cd music-player
+cd frontend
 
 # 安装依赖(推荐使用pnpm安装)
 pnpm/npm install
@@ -35,19 +36,23 @@ pnpm/npm run dev
 ```
 ## 项目结构
 ```text
-music-player/
+
+// 前端
+frontend/
 ├── public/                # 静态资源
 ├── src/
-│   ├── api/               # 预留axios接口
+│   ├── api/            # api控制拦截
+│   │   ├── index.js                 # 基础api设置
+│   │   └── graphql.js               # GraphQL请求转发
 │   ├── assets/            # 全局资源文件
 │   │   ├── css                 # 播放器样式
-│   │   ├── data                # 数据
+│   │   └── data                # 数据
 │   ├── components/        # 组件
 │   │   ├── PlayerControls.vue  # 播放控制组件
 │   │   ├── Playlist.vue        # 播放列表组件
 │   │   ├── ProgressBar.vue     # 进度条组件
-│   │   └── AlbumArt.vue        # 专辑封面组件
-│   │   └── AudioPlayer.vue     # 播放器核心组件
+│   │   ├── AlbumArt.vue        # 专辑封面组件
+│   │   ├── AudioPlayer.vue     # 播放器核心组件
 │   │   └── LyricsDisplay.vue   # 歌词显示组件
 │   ├── stores/            # Pinia状态管理
 │   │   └── player.js      # 播放器状态管理
@@ -56,6 +61,15 @@ music-player/
 ├── .env.example           # 环境变量示例
 ├── vite.config.js         # Vite配置
 └── package.json
+
+// 后端
+backend/
+├── src/
+│   ├── main/             
+│   │   ├── java/com/mercury/player/music   # 播放器后端
+│   │   └── resources                       # GraphQL定义和SQL建表语句
+│   └── test/
+└── pom.xml  
 ```
 
 ## 开发
@@ -65,8 +79,6 @@ music-player/
 按照上面的项目结构可以快速完成对于播放器的快速开发和添加到其他项目中。
 
 可以通过控制不同Vue组件和CSS样式的渲染实现多种显示效果，能给用户提供显示效果。
-
-支持的歌词含有LRC与ASS格式，ASS格式支持LDDC导出的逐字、逐词显示
 
 ## 构建与部署
 ```bash
@@ -100,3 +112,5 @@ netlify/github action:把你的项目提交到仓库或者将构建好的项目�
     "url": ""    // 音乐源
   },
 ```
+
+> 现在可以向PostgreSQL数据库中插入指定的表进行查询操作。

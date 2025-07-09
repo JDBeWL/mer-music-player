@@ -1,0 +1,18 @@
+type Music {
+    id: Int!
+    title: String!
+    cover: String
+    artist: String!
+    url: String!
+}
+
+type Query {
+    allMusics: [Music!]!
+    music(id: Int!): Music
+}
+
+type Mutation {
+    createMusic(title: String!, cover: String, artist: String!, url: String!): Music!
+    updateMusic(id: Int!, title: String, cover: String, artist: String, url: String): Music!
+    deleteMusic(id: Int!): Boolean!
+}

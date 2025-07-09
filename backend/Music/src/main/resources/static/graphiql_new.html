@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Merplayer GraphiQL</title>
+  <style>
+    body {
+      height: 100%;
+      margin: 0;
+      width: 100%;
+      overflow: hidden;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    }
+    #graphiql {
+      height: 100vh;
+    }
+    .loading {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      color: #666;
+    }
+    .error-message {
+      color: #e53935;
+      margin: 20px;
+      padding: 10px;
+      border: 1px solid #ffcdd2;
+      border-radius: 4px;
+      background-color: #ffebee;
+      max-width: 80%;
+    }
+  </style>
+
+  <script src="https://cdn.jsdelivr.net/npm/react@17/umd/react.production.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/react-dom@17/umd/react-dom.production.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/graphiql@2/graphiql.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/graphiql@2/graphiql.min.js"></script>
+
+  <!-- 备用CDN，如果上面的加载失败可以取消下面的注释 -->
+  <!-- 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/17.0.2/umd/react.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/17.0.2/umd/react-dom.production.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/graphiql/2.4.7/graphiql.min.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/graphiql/2.4.7/graphiql.min.js"></script>
+  -->
+</head>
+<body>
+  <div id="graphiql">
+    <div class="loading">
+      <h2>正在加载 GraphiQL...</h2>
+      <p>如果长时间未加载，可能是CDN访问问题</p>
+    </div>
+  </div>
+
+  <script>
+    // 显示错误信息的函数
+    function showError(message) {
+      const graphiqlElement = document.getElementById('graphiql');
+      graphiqlElement.innerHTML = `<div class="error-message">
+        <h3>加载错误</h3>
+        <p>${message}</p>
+        <p>建议：</p>
+        <ul>
+          <li>检查网络连接</li>
+          <li>确保GraphQL服务器正在运行</li>
+          <li>尝试使用其他浏览器</li>
+          <li>如果使用代理服务，可能需要关闭代理</li>
+        </ul>
+      </div>`;
+    }
+
+    // 尝试初始化GraphiQL
+    try {
+      // 检查必要的对象是否存在
+      if (typeof React === 'undefined' || typeof ReactDOM === 'undefined' || typeof GraphiQL === 'undefined') {
+        throw new Error("必要的依赖未加载。请检查网络连接或CDN可用性。");
+      }
+      // 自定义fetcher实现，确保请求头正确设置
+      const fetcher = async (graphQLParams) => {
+        const response = await fetch('/graphql', {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(graphQLParams),
+          credentials: 'same-origin',
+        });
+        return response.json();
+      };
+
+      // 默认查询示例
+      const defaultQuery = `query {
+        allMusics {
+          id
+          title
+          artist
+          cover
+          url
+        }
+      }`;
+
+      // 渲染GraphiQL界面
+      ReactDOM.render(
+        React.createElement(GraphiQL, {
+          fetcher: fetcher,
+          defaultQuery: defaultQuery,
+          // 添加其他配置选项
+          headerEditorEnabled: true,
+          shouldPersistHeaders: true,
+        }),
+        document.getElementById('graphiql'),
+      );
+    } catch (error) {
+      console.error("GraphiQL初始化错误:", error);
+      showError(error.message || "加载GraphiQL界面时发生未知错误");
+    }
+  </script>
+</body>
+</html>
