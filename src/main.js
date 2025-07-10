@@ -51,16 +51,14 @@ async function enrichTrack(track) {
 async function initApp() {
   const playerStore = usePlayerStore();
   try {
-    // 从API获取播放列表数据，而不是本地JSON文件
+    // 从API获取播放列表数据
     const { getAllMusic } = await import("./api/graphql.js");
     const rawPlaylist = await getAllMusic();
-    
-    // 继续处理元数据等内容
     const enrichedPlaylist = await Promise.all(rawPlaylist.map(enrichTrack));
     playerStore.initialize(enrichedPlaylist);
   } catch (error) {
     console.error("初始化播放列表失败:", error);
-    // 失败时尝试从本地加载（作为备选方案）
+    // 失败时尝试从本地加载
     try {
       const response = await fetch("/data/playlist.json");
       if (!response.ok)
