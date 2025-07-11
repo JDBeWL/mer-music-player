@@ -20,10 +20,32 @@ export const usePlayerStore = defineStore('player', {
   }),
   actions: {
     initialize(initialPlaylist) {
-      this.playlist = initialPlaylist.map(song => ({
+      // 验证原始数据
+      console.log('初始化播放列表 - 原始数据:', JSON.parse(JSON.stringify(initialPlaylist)));
+
+      const processed = initialPlaylist.map(song => ({
+        ...song,
+        id: song.id !== undefined ? parseInt(song.id) : Math.floor(Math.random() * 1000000)
+      }));
+      
+      // 执行去重
+      this.playlist = processed.filter((value, index, self) => {
+        // 验证ID
+        if (typeof value.id !== 'number' || isNaN(value.id)) {
+          console.warn(`无效的ID格式: ${value.id} (标题: ${value.title})`);
+          return false;
+        }
+        
+        const firstIndex = self.findIndex(t => t.id === value.id);
+        if (firstIndex !== index) {
+          console.warn(`检测到重复的歌曲ID: ${value.id}，将忽略后续出现的条目 (标题: ${value.title})`);
+        }
+        return firstIndex === index;
+      }).map(song => ({
         ...defaultSong,
         ...song
-      }))
+      }));
+      
       if (this.playlist.length > 0) {
         this.currentSong = this.playlist[0]
         this.isPlaying = false
@@ -31,9 +53,11 @@ export const usePlayerStore = defineStore('player', {
     },
     updateCurrentSongCover(runtimeCover) {
       if (!this.currentSong) return
+      const validRuntimeCover = runtimeCover || this.currentSong.cover || "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAHESMIAAAAABJRU5ErkJggg==";
+      
       this.currentSong = {
         ...this.currentSong,
-        runtimeCover: runtimeCover || ''
+        runtimeCover: validRuntimeCover
       }
       const index = this.playlist.findIndex(s => s.id === this.currentSong.id)
       if (index > -1) {
