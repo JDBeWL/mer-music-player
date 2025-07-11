@@ -40,7 +40,7 @@ const store = usePlayerStore()
 const currentSong = computed(() => store.currentSong)
 
 function onCoverChange(coverUrl) {
-  if (coverUrl?.startsWith('http') || coverUrl?.startsWith('blob:') || coverUrl?.startsWith('/')) {
+  if (coverUrl && (coverUrl.startsWith('http') || coverUrl.startsWith('/'))) {
     store.updateCurrentSongCover(coverUrl)
   }
 }
