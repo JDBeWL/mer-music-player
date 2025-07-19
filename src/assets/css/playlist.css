@@ -4,9 +4,9 @@
     --border-color: #ccc;
     --accent-color: #2196F3;
     --indicator-width: 3px;
-    --item-padding: 12px;
+    --item-padding: 0.75rem;
     --mobile-padding: 8px;
-    --min-height: 35px;
+    --min-height: 40px;
     --mobile-height: 30px;
   }
   
@@ -20,8 +20,8 @@
     flex-direction: column;
     width: 100%;
     background: #f8f8f8;
-    min-height: var(--min-height);
-    max-height: var(--max-height);
+    /* min-height: var(--min-height);
+    max-height: var(--max-height); */
     height: 100vh;
     overflow-y: auto;
     scroll-behavior: smooth;
@@ -37,14 +37,14 @@
       background 0.3s ease,
       transform 0.1s ease;
     display: flex;
+    justify-content: left;
     align-items: center;
     border-bottom: 1px solid #eee;
-    min-height: var(--min-height);
     max-width: 300px;
     position: relative;
     background: transparent;
-    min-height: 54px;
-    margin: 2px 0px;
+    min-height: 50px; 
+    flex-shrink: 0; 
   }
   
 

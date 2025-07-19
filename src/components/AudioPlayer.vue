@@ -1,7 +1,7 @@
 <template>
-  <audio ref="audioElement" :src="currentSong?.url"
-    :type="currentSong?.url.endsWith('.flac') ? 'audio/flac' : 'audio/mpeg'" @timeupdate="updateTime"
-    @ended="handleSongEnd" @loadedmetadata="setDuration" />
+  <audio ref="audioElement" :src="getSongUrl(currentSong?.url)"
+    :type="currentSong?.url?.endsWith('.flac') ? 'audio/flac' : 'audio/mpeg'" @timeupdate="updateTime"
+    @ended="handleSongEnd" @loadedmetadata="setDuration" @error="handleAudioError" />
 </template>
 
 <script setup>
@@ -13,6 +13,37 @@ const audioElement = ref(null);
 
 // 计算当前歌曲
 const currentSong = computed(() => store.currentSong);
+
+// 处理Electron环境下的文件路径
+const getSongUrl = (url) => {
+  if (!url) return '';
+
+  // 检查是否在Electron环境下
+  if (window.require) {
+    const path = window.require('path');
+    try {
+      // 检查是否已经是绝对路径
+      if (url.startsWith('/') && !url.includes('://') && !path.isAbsolute(url)) {
+        // 转换为绝对路径
+        const fullPath = path.join(process.cwd(), 'public', url);
+        console.log(`转换路径: ${url} -> file://${fullPath}`);
+        return `file://${fullPath}`;
+      }
+    } catch (error) {
+      console.error('路径转换错误:', error);
+    }
+  }
+  return url;
+};
+
+// 处理音频加载错误
+const handleAudioError = (e) => {
+  console.error('音频加载错误:', e);
+  console.error('当前URL:', currentSong.value?.url);
+  console.error('处理后URL:', getSongUrl(currentSong.value?.url));
+
+  // 可以在这里添加错误处理逻辑，比如尝试使用备用URL或显示错误信息
+};
 
 // 监听播放状态变化
 watch(
@@ -28,8 +59,8 @@ watch(() => store.currentSong, async (newSong, oldSong) => {
       audioElement.value.pause()
       audioElement.value.currentTime = 0
 
-      // 强制重新加载音频源
-      audioElement.value.src = newSong.url
+      // 强制重新加载音频源，使用处理后的URL
+      audioElement.value.src = getSongUrl(newSong.url)
       await audioElement.value.load()
 
       // 添加ready状态监听

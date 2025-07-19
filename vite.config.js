@@ -1,15 +1,20 @@
-import { defineConfig } from 'vite'
-import vue from '@vitejs/plugin-vue'
-import { fileURLToPath, URL } from 'node:url' 
+import { defineConfig } from 'vite';
+import vue from '@vitejs/plugin-vue';
+import { fileURLToPath, URL } from 'node:url';
 
 export default defineConfig({
   plugins: [vue()],
+  base: './',
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
       buffer: 'buffer',
     },
     extensions: ['.js', '.vue'] 
+  },
+  build: {
+    outDir: 'dist',
+    assetsDir: 'assets'
   },
   define: {
     'process.env': {},
@@ -19,7 +24,7 @@ export default defineConfig({
     include: ['buffer']
   },
   server: {
-    // 阻止对lyrics目录的history回退
+    port: 5173,
     historyApiFallback: {
         disableDotRule: true,
         rewrites: [
@@ -36,5 +41,5 @@ export default defineConfig({
         rewrite: (path) => path
       }
     }
-}
-})
+  }
+});

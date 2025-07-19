@@ -6,6 +6,35 @@ import "./assets/css/main.css";
 import { Buffer } from "buffer";
 import * as mm from "music-metadata";
 
+if (window.require) {
+  const { ipcRenderer } = window.require('electron')
+  const path = window.require('path')
+  const fs = window.require('fs')
+
+  // 处理本地文件路径
+  window.electronAPI = {
+    getLocalPath: (relativePath) => {
+      // 确保相对路径处理正确
+      if (relativePath.startsWith('/')) {
+        relativePath = relativePath.substring(1)
+      }
+      const fullPath = path.join(process.cwd(), 'public', relativePath)
+      console.log(`将相对路径 ${relativePath} 转换为绝对路径: ${fullPath}`)
+      return fullPath
+    },
+    fileExists: (filePath) => {
+      try {
+        return fs.existsSync(filePath)
+      } catch (err) {
+        console.error(`检查文件存在失败: ${filePath}`, err)
+        return false
+      }
+    }
+  }
+
+  console.log('Electron环境初始化完成，当前工作目录:', process.cwd())
+}
+
 const app = createApp(App);
 const pinia = createPinia();
 app.use(pinia);
@@ -182,40 +211,118 @@ async function enrichTrack(track) {
 
 async function initApp() {
   const playerStore = usePlayerStore();
+  // 本地加载
   try {
-    // 从API获取播放列表数据
-    const { getAllMusic } = await import("./api/graphql.js");
-    const rawPlaylist = await getAllMusic();
-    console.log("GraphQL数据源:", JSON.parse(JSON.stringify(rawPlaylist)));
+    // 添加时间戳防止浏览器缓存
+    const timestamp = Date.now();
+    let response;
 
+    // 检查是否在Electron环境中
+    if (window.require) {
+      const fs = window.require('fs');
+      const path = window.require('path');
+
+      // 使用正确的资源路径 - 直接使用硬编码路径优先级方案
+      let resourcePath;
+
+      // 直接使用process.cwd()或硬编码路径
+      try {
+        // 确保window.electronAPI存在
+        if (!window.electronAPI) {
+          window.electronAPI = {};
+          console.log('创建window.electronAPI对象');
+        }
+
+        // 直接添加getResourcePath方法如果不存在
+        if (!window.electronAPI.getResourcePath) {
+          window.electronAPI.getResourcePath = function() {
+            return process.cwd ? path.join(process.cwd(), 'public') : './public';
+          };
+          console.log('在前端动态添加getResourcePath方法');
+        }
+
+        // 尝试各种可能的资源路径位置
+        const possibilities = [
+          // 使用添加的getResourcePath
+          window.electronAPI.getResourcePath(),
+          // 如果有getLocalPath，使用它
+          typeof window.electronAPI.getLocalPath === 'function' 
+            ? path.dirname(window.electronAPI.getLocalPath('/')) : null,
+          // 尝试获取当前工作目录
+          process.cwd ? path.join(process.cwd(), 'public') : null,
+          // 尝试常见的打包位置
+          path.join(process.cwd(), 'resources', 'public'),
+          path.join(process.cwd(), '..', 'resources', 'public'),
+          // 最后的回退
+          './public'
+        ].filter(Boolean);
+
+        console.log('尝试的可能路径:', possibilities);
+
+        // 尝试每个可能的路径直到找到一个存在的
+        for (const possiblePath of possibilities) {
+          try {
+            const testFile = path.join(possiblePath, 'data', 'playlist.json');
+            console.log('测试路径:', testFile);
+            if (fs.existsSync(testFile)) {
+              resourcePath = possiblePath;
+              console.log('找到有效的资源路径:', resourcePath);
+              break;
+            }
+          } catch (e) {
+            console.log('路径测试失败:', e.message);
+          }
+        }
+
+        // 如果还没找到，使用第一个可能的路径
+        if (!resourcePath && possibilities.length > 0) {
+          resourcePath = possibilities[0];
+          console.log('使用备用资源路径:', resourcePath);
+        }
+      } catch (e) {
+        console.error('确定资源路径时出错:', e);
+        resourcePath = './public';
+      }
+
+      const playlistPath = path.join(resourcePath, 'data', 'playlist.json');
+      console.log('Electron环境：从路径加载播放列表', playlistPath);
+
+      try {
+        const data = fs.readFileSync(playlistPath, 'utf-8');
+        const rawPlaylist = JSON.parse(data);
+        // 调整文件路径为绝对路径
+        const processedPlaylist = rawPlaylist.map(track => {
+          return {
+            ...track,
+            url: track.url.startsWith('/') ? path.join(resourcePath, track.url.slice(1)) : track.url,
+            cover: track.cover.startsWith('/') ? path.join(resourcePath, track.cover.slice(1)) : track.cover
+          }
+        });
+        const enrichedPlaylist = await Promise.all(processedPlaylist.map(enrichTrack));
+        playerStore.initialize(enrichedPlaylist);
+        console.log('播放器状态已初始化(Electron):', JSON.parse(JSON.stringify(playerStore.$state)));
+        console.log("已从本地文件系统加载播放列表");
+        app.mount("#app");
+        return; // 提前返回，避免继续执行下面的代码
+      } catch (electronError) {
+        console.error("Electron环境下加载播放列表失败:", electronError);
+      }
+    }
+
+    // 浏览器环境或Electron加载失败后的备用方案
+    response = await fetch(`/data/playlist.json?_=${timestamp}`);
+    if (!response.ok)
+      throw new Error(`加载playlist.json失败: ${response.status}`);
+
+    const rawPlaylist = await response.json();
     const enrichedPlaylist = await Promise.all(rawPlaylist.map(enrichTrack));
     playerStore.initialize(enrichedPlaylist);
-    console.log(
-      "播放器状态已初始化:",
-      JSON.parse(JSON.stringify(playerStore.$state))
-    );
-  } catch (error) {
-    console.error("初始化播放列表失败:", error);
-    // 失败时尝试从本地加载
-    try {
-      const response = await fetch("/data/playlist.json");
-      if (!response.ok)
-        throw new Error(`加载playlist.json失败: ${response.status}`);
-
-      const rawPlaylist = await response.json();
-      console.log("本地JSON数据源:", JSON.parse(JSON.stringify(rawPlaylist)));
-
-      const enrichedPlaylist = await Promise.all(rawPlaylist.map(enrichTrack));
-      playerStore.initialize(enrichedPlaylist);
-      console.log(
-        "播放器状态已初始化:",
-        JSON.parse(JSON.stringify(playerStore.$state))
-      );
-      console.log("已从本地JSON加载备用播放列表");
-    } catch (fallbackError) {
-      console.error("备选播放列表加载失败:", fallbackError);
-    }
+    console.log('播放器状态已初始化(Web):', JSON.parse(JSON.stringify(playerStore.$state)));
+    console.log("已从网络加载备用播放列表");
+  } catch (fallbackError) {
+    console.error("所有播放列表加载方式均失败:", fallbackError);
   }
+
 
   app.mount("#app");
 }

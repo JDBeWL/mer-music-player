@@ -52,7 +52,8 @@
 <script setup>
 import { ref, reactive } from "vue";
 import { usePlayerStore } from "@/stores/player";
-import { createMusic } from "@/api/graphql";
+// import { createMusic } from "@/api/graphql";
+// 暂时禁用，后面会使用RESTful的写法或者其他的nodejs控制方法设计json或者后端请求
 
 const emit = defineEmits(["close", "music-added"]);
 

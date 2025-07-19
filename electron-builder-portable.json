@@ -1,0 +1,15 @@
+{
+  "electronVersion": "37.2.1",
+  "win": {
+    "target": "portable",
+    "icon": "public/kazusa.ico",
+    "sign": false
+  },
+  "forceCodeSigning": false,
+  "signingHashAlgorithms": null,
+  "buildDependenciesFromSource": true,
+  "electronDist": "node_modules/electron/dist",
+  "directories": {
+    "output": "release-portable"
+  }
+}

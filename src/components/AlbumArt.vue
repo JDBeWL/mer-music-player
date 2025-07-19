@@ -35,18 +35,4 @@ function onCoverError() {
 </script>
 
 <style scoped>
-
-.placeholder {
-  width: 200px;
-  height: 200px;
-  background: linear-gradient(135deg, #f0f0f0 0%, #e0e0e0 100%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 80px;
-  border-radius: 12px;
-  color: #999;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  user-select: none;
-}
 </style>

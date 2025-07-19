@@ -1,49 +1,51 @@
 [
   {
     "id": 1,
-    "title": "∞",
-    "artist": "オグリキャップ (CV.高柳知葉)",
+    "title": "你的眼泪同你一样廉价",
+    "artist": "停電前夜",
     "cover": "",
-    "url": "/music/music1.flac"
+    "url": "/music/停電前夜 - 你的眼泪同你一样廉价.flac"
   },
   {
     "id": 2,
-    "title": "我是，女孩。",
-    "artist": "停電前夜",
-    "url": "/music/music2.flac"
+    "title": "ささやかな息吹",
+    "artist": "メガミノウタゲ,kyiku,Flare Rune",
+    "cover": "",
+    "url": "/music/メガミノウタゲ,kyiku,Flare Rune - ささやかな息吹.flac"
   },
   {
     "id": 3,
-    "title": "メモリー",
-    "artist": "kyiku,可不,ナースロボ_タイプT",
-    "cover": "/covers/cover3.jpg",
-    "url": "/music/music3.mp3"
+    "title": "リリィララ (feat. 初音ミク)",
+    "artist": "ざんぎ,初音ミク",
+    "cover": "",
+    "url": "/music/ざんぎ,初音ミク - リリィララ (feat. 初音ミク).flac"
   },
   {
     "id": 4,
-    "title": "Autumn (feat. 星尘)",
-    "artist": "Aika",
-    "url": "/music/AIKA,星尘 - Autumn (feat. 星尘).flac"
+    "title": "cat reincarnation",
+    "artist": "nyamura",
+    "cover": "",
+    "url": "/music/nyamura - cat reincarnation.flac"
   },
   {
     "id": 5,
-    "title": "iiyo",
-    "artist": "23.exe",
-    "cover": "/covers/cover5.png",
-    "url": "https://api.paugram.com/netease/?id=1501447956&play=true"
+    "title": "私はあの花火大会に行かなかった (feat. ANRI Arcane)",
+    "artist": "神经罐头,ANRI Arcane",
+    "cover": "",
+    "url": "/music/神经罐头,ANRI Arcane - 私はあの花火大会に行かなかった (feat. ANRI Arcane).flac"
   },
   {
     "id": 6,
-    "title": "所以我伸出了手 Feat.星尘",
-    "artist": "Evalia/Creuzer/星尘",
-    "cover": "https://p2.music.126.net/JY-NJQtf-UQvo6JBDF3XGg==/109951170379791866.jpg",
-    "url": "https://api.paugram.com/netease/?id=2666293061&play=true"
+    "title": "追憶、ワンルーム",
+    "artist": "めェ子,初音ミク",
+    "cover": "",
+    "url": "/music/めェ子,初音ミク - 追憶、ワンルーム.flac"
   },
   {
     "id": 7,
-    "title": "冴ゆる青",
-    "artist": "瀬名航",
-    "cover": "https://p2.music.126.net/XaRf6-c370tlR5FSTLTPpQ==/109951170169095462.jpg",
-    "url": "https://api.paugram.com/netease/?id=2648166069&play=true"
+    "title": "you’ve changed， i‘ve changed",
+    "artist": "San Holo,Chet Porter",
+    "cover": "",
+    "url": "/music/San Holo,Chet Porter - you've changed, i've changed.flac"
   }
 ]
