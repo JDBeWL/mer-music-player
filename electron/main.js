@@ -167,7 +167,7 @@ function createChineseMenu() {
             dialog.showMessageBox({
               title: '关于',
               message: 'MerPlayer',
-              detail: '版本 0.2.3\n构建于:' + new Date().toLocaleString() +'\nVite版本：6.3.5\nVue版本：3.0.3\nElectron版本：37.2.1',
+              detail: '版本 0.2.5\n构建于 ' + new Date().toLocaleString() +'\nVite版本 6.3.5\nVue版本 3.0.3\nElectron版本 37.2.1',
             });
           }
         }

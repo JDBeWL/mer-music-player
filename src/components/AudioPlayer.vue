@@ -41,8 +41,6 @@ const handleAudioError = (e) => {
   console.error('音频加载错误:', e);
   console.error('当前URL:', currentSong.value?.url);
   console.error('处理后URL:', getSongUrl(currentSong.value?.url));
-
-  // 可以在这里添加错误处理逻辑，比如尝试使用备用URL或显示错误信息
 };
 
 // 监听播放状态变化
@@ -106,12 +104,23 @@ onMounted(() => {
   }
   store.registerAudioElement(audioElement.value);
 
+  // 初始化音频元素音量
+  audioElement.value.volume = store.volume;
+
   watch(
     () => store.currentTime,
     (newTime) => {
       if (Math.abs(audioElement.value.currentTime - newTime) > 0.1) {
         audioElement.value.currentTime = newTime;
       }
+    }
+  )
+
+  // 监听音量变化并应用到音频
+  watch(
+    () => store.volume,
+    (newVolume) => {
+      audioElement.value.volume = newVolume;
     }
   )
 })

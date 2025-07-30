@@ -2,50 +2,106 @@
   {
     "id": 1,
     "title": "你的眼泪同你一样廉价",
-    "artist": "停電前夜",
+    "artist": "(流行/另类摇滚)-停電前夜",
     "cover": "",
     "url": "/music/停電前夜 - 你的眼泪同你一样廉价.flac"
   },
   {
     "id": 2,
     "title": "ささやかな息吹",
-    "artist": "メガミノウタゲ,kyiku,Flare Rune",
+    "artist": "(water core) メガミノウタゲ,kyiku,Flare Rune",
     "cover": "",
     "url": "/music/メガミノウタゲ,kyiku,Flare Rune - ささやかな息吹.flac"
   },
   {
     "id": 3,
-    "title": "リリィララ (feat. 初音ミク)",
-    "artist": "ざんぎ,初音ミク",
-    "cover": "",
-    "url": "/music/ざんぎ,初音ミク - リリィララ (feat. 初音ミク).flac"
+    "title": "所以我伸出了手 Feat.星尘",
+    "artist": "(流行/dnb) Evalia/Creuzer/星尘",
+    "cover": "https://p2.music.126.net/JY-NJQtf-UQvo6JBDF3XGg==/109951170379791866.jpg",
+    "url": "https://api.paugram.com/netease/?id=2666293061&play=true"
   },
   {
     "id": 4,
-    "title": "cat reincarnation",
-    "artist": "nyamura",
+    "title": "メモリー",
+    "artist": "(water core) kyiku,可不,ナースロボ_タイプT",
     "cover": "",
-    "url": "/music/nyamura - cat reincarnation.flac"
+    "url": "/music/kyiku,可不,ナースロボ_タイプT - メモリー.mp3"
   },
   {
     "id": 5,
     "title": "私はあの花火大会に行かなかった (feat. ANRI Arcane)",
-    "artist": "神经罐头,ANRI Arcane",
+    "artist": "(管弦乐/流行) 神经罐头,ANRI Arcane",
     "cover": "",
     "url": "/music/神经罐头,ANRI Arcane - 私はあの花火大会に行かなかった (feat. ANRI Arcane).flac"
   },
   {
     "id": 6,
     "title": "追憶、ワンルーム",
-    "artist": "めェ子,初音ミク",
+    "artist": "(J-Rock) めェ子,初音ミク",
     "cover": "",
     "url": "/music/めェ子,初音ミク - 追憶、ワンルーム.flac"
   },
   {
     "id": 7,
-    "title": "you’ve changed， i‘ve changed",
-    "artist": "San Holo,Chet Porter",
+    "title": "you’ve changed， i’ve changed",
+    "artist": "(流行) San Holo,Chet Porter",
     "cover": "",
     "url": "/music/San Holo,Chet Porter - you've changed, i've changed.flac"
+  },
+  {
+    "id": 8,
+    "title": "灰すら遺らなくても。",
+    "artist": "(Trance) Canaxi",
+    "cover": "",
+    "url": "/music/Canaxi - 灰すら遺らなくても。.flac"
+  },
+  {
+    "id": 9,
+    "title": "コントラスト",
+    "artist": "（流行） 初星学園,佐々木恵梨,鵜飼大幹,中村ヒロ,篠澤 広",
+    "cover": "",
+    "url": "/music/初星学園,佐々木恵梨,鵜飼大幹,中村ヒロ,篠澤 広 - コントラスト.flac"
+  },
+  {
+    "id": 10,
+    "title": "Robot",
+    "artist": "(trap) АДЛИН",
+    "cover": "",
+    "url": "/music/АДЛИН - Robot.flac"
+  },
+  {
+    "id": 11,
+    "title": "coffee",
+    "artist": "(另类摇滚/后朋克) Corn Wave",
+    "cover": "",
+    "url": "/music/Corn Wave - coffee.flac"
+  },
+  {
+    "id": 12,
+    "title": "サンフェーデッド",
+    "artist": "(盯鞋) 初星学園,篠澤 広",
+    "cover": "",
+    "url": "/music/初星学園,篠澤 広 - サンフェーデッド.flac"
+  },
+  {
+    "id": 13,
+    "title": "憑いている (feat. 初音ミク)",
+    "artist": "(dnb/breakcore/hyperpop/color bass)Ruliea,初音ミク",
+    "cover": "",
+    "url": "/music/Ruliea,初音ミク - 憑いている (feat. 初音ミク).flac"
+  },
+  {
+    "id": 14,
+    "title": "ユメミ",
+    "artist": "(UK Garage)r-906,LeuR",
+    "cover": "",
+    "url": "/music/r-906,LeuR - ユメミ.flac"
+  },
+  {
+    "id": 15,
+    "title": "III",
+    "artist": "(Post-Rock)Athletics",
+    "cover": "",
+    "url": "/music/Athletics - III.flac"
   }
 ]

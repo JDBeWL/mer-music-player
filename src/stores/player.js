@@ -16,7 +16,8 @@ export const usePlayerStore = defineStore('player', {
     playlist: [],
     isPlaying: false,
     currentTime: 0,
-    duration: 0
+    duration: 0,
+    volume: 0.7
   }),
   actions: {
     initialize(initialPlaylist) {
@@ -101,6 +102,13 @@ export const usePlayerStore = defineStore('player', {
       this.currentTime = clamped
       if (this.audioElement) {
         this.audioElement.currentTime = clamped
+      }
+    },
+    setVolume(volume) {
+      const clampedVolume = Math.max(0, Math.min(1, volume))
+      this.volume = clampedVolume
+      if (this.audioElement) {
+        this.audioElement.volume = clampedVolume
       }
     }
   }
