@@ -16,21 +16,23 @@ export const usePlayerStore = defineStore('player', {
     playlist: [],
     isPlaying: false,
     currentTime: 0,
-    duration: 0
+    duration: 0,
+    volume: 0.7
   }),
   actions: {
     initialize(initialPlaylist) {
       // 验证原始数据
       console.log('初始化播放列表 - 原始数据:', JSON.parse(JSON.stringify(initialPlaylist)));
 
-      const processed = initialPlaylist.map(song => ({
+      // 避免引用共享
+      const processed = [...initialPlaylist].map(song => ({
         ...song,
         id: song.id !== undefined ? parseInt(song.id) : Math.floor(Math.random() * 1000000)
       }));
       
-      // 执行去重
+      // 执行去重并验证数据完整性
       this.playlist = processed.filter((value, index, self) => {
-        // 验证ID
+        // 验证ID类型
         if (typeof value.id !== 'number' || isNaN(value.id)) {
           console.warn(`无效的ID格式: ${value.id} (标题: ${value.title})`);
           return false;
@@ -47,7 +49,7 @@ export const usePlayerStore = defineStore('player', {
       }));
       
       if (this.playlist.length > 0) {
-        this.currentSong = this.playlist[0]
+        this.currentSong = { ...this.playlist[0] }
         this.isPlaying = false
       }
     },
@@ -100,6 +102,13 @@ export const usePlayerStore = defineStore('player', {
       this.currentTime = clamped
       if (this.audioElement) {
         this.audioElement.currentTime = clamped
+      }
+    },
+    setVolume(volume) {
+      const clampedVolume = Math.max(0, Math.min(1, volume))
+      this.volume = clampedVolume
+      if (this.audioElement) {
+        this.audioElement.volume = clampedVolume
       }
     }
   }

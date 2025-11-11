@@ -19,7 +19,7 @@
     transition: all 0.18s ease;
     transform-origin: left center;
     word-break: break-word;
-    max-width: 100%;
+    max-width: calc((100% - 4px) / 1.1);
     min-height: 1.2em;
 }
 .lyrics.active {
