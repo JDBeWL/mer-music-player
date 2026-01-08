@@ -4,13 +4,14 @@
             <div v-if="loading" class="loading">加载歌词中...</div>
             <div v-else-if="!lyrics.length" class="no-lyrics">暂无歌词</div>
             <div v-else>
-                <div class="lyrics" v-for="(line, index) in lyrics" :key="index" :class="{ active: isActive(index) }">
+                <div class="lyrics" v-for="(line, index) in lyrics" :key="index" :class="{ active: isActive(index) }" @click="seekToLyric(line.time, index)">
                     <template v-if="line.karaoke && isActive(index)">
                         <!-- 卡拉OK -->
                         <p class="first-line">
                             <span v-for="(word, idx) in line.words" :key="idx"
                                 :class="['karaoke-text', { 'active': isWordActive(word) }]"
-                                :style="getASSKaraokeStyle(word)">
+                                :style="getASSKaraokeStyle(word)"
+                                :data-text="word.text">
                                 {{ word.text }}
                             </span>
                         </p>
@@ -146,7 +147,7 @@ export default {
             //解析卡拉OK并生成结果
             const result = [];
             groupedMap.forEach(group => {
-                // 解析卡拉OK
+                // 解析卡拉OK（\k 和 \kf 时间单位都是厘秒，即 0.01 秒）
                 const parseKaraoke = (text) => {
                     const karaokeTag = /{\\k[f]?(\d+)}([^{}]+)/g;
                     let words = [];
@@ -154,9 +155,7 @@ export default {
                     let match;
 
                     while ((match = karaokeTag.exec(text)) !== null) {
-                        const duration = match[0].includes('\\kf')
-                            ? parseInt(match[1]) * 0.01
-                            : parseInt(match[1]) * 0.1;
+                        const duration = parseInt(match[1]) * 0.01;
                         words.push({
                             text: match[2],
                             start: accTime,
@@ -182,24 +181,26 @@ export default {
             return result.sort((a, b) => a.time - b.time);
         };
 
-        const scrollToActiveLyric = (immediate = false) => {
-            if (!containerRef.value || activeIndex.value === -1) return;
+        const scrollToActiveLyric = (immediate = false, targetIndex = null) => {
+            const index = targetIndex !== null ? targetIndex : activeIndex.value;
+            if (!containerRef.value || index === -1) return;
 
             const container = containerRef.value;
-            const activeElement = container.querySelector(".lyrics.active");
+            const allLyrics = container.querySelectorAll(".lyrics");
+            const targetElement = allLyrics[index];
 
             nextTick(() => {
-                if (!activeElement) return;
+                if (!targetElement) return;
                 const containerRect = container.getBoundingClientRect();
-                const elementRect = activeElement.getBoundingClientRect();
+                const elementRect = targetElement.getBoundingClientRect();
 
-                // 计算相对滚动位置
+                // 计算相对滚动位置，让目标歌词显示在容器正中间
                 const relativePosition = elementRect.top - containerRect.top;
                 const targetScroll =
                     container.scrollTop +
                     relativePosition -
-                    containerRect.height / 3 +
-                    elementRect.height / 3;
+                    containerRect.height / 2 +
+                    elementRect.height / 2;
 
                 const maxScroll = container.scrollHeight - containerRect.height;
                 const finalScroll = Math.max(0, Math.min(targetScroll, maxScroll));
@@ -214,7 +215,7 @@ export default {
         };
 
         const stopWatcher = watchEffect(() => {
-            const ADVANCE_TIME = 0.2;
+            const ADVANCE_TIME = 0.15;
             const currentTime = playerStore.currentTime + ADVANCE_TIME;
             let newIndex = -1;
 
@@ -240,7 +241,9 @@ export default {
 
             if (activeIndex.value !== newIndex) {
                 activeIndex.value = newIndex;
-                scrollToActiveLyric();
+                requestAnimationFrame(() => {
+                    scrollToActiveLyric();
+                });
             }
         });
 
@@ -319,17 +322,27 @@ export default {
 
         const getASSKaraokeStyle = (word) => {
             const t = playerStore.currentTime;
+            let progress = 0;
+            
             // 如果当前时间超过单词结束时间，保持100%进度
             if (t >= word.end) {
-                return { '--progress': '100%' };
+                progress = 100;
             }
             // 如果当前时间在单词时间范围内，计算进度百分比
             else if (t >= word.start) {
-                const progress = ((t - word.start) / (word.end - word.start)) * 100;
-                return { '--progress': `${progress}%` };
+                progress = ((t - word.start) / (word.end - word.start)) * 100;
             }
-            // 如果还未到单词时间，进度为0
-            return { '--progress': '0%' };
+            
+            return { '--progress': `${progress}%` };
+        };
+
+        const seekToLyric = (time, index) => {
+            playerStore.setCurrentTime(time);
+            if (!playerStore.isPlaying) {
+                playerStore.playPause();
+            }
+            // 立即滚动到点击的歌词位置
+            scrollToActiveLyric(true, index);
         };
 
         return {
@@ -340,6 +353,7 @@ export default {
             containerRef,
             isWordActive,
             getASSKaraokeStyle,
+            seekToLyric,
         };
     },
 };

@@ -1,59 +1,76 @@
-  /* 进度条容器 */
-  .progress-container {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin: 12px 0;
-      width: 100%;
-  }
-  
-  input.progress-bar[type="range"] {
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-    flex-grow: 1;
-    height: 5px;
-    background: transparent;
-    cursor: pointer;
-  }
-  
-  /* WebKit浏览器样式 */
-  input.progress-bar[type="range"]::-webkit-slider-runnable-track {
-    height: 5px;
-    border-radius: 2px;
-    background: linear-gradient(to right, #2196F3 var(--progress, 0%), #ddd 0);
-  }
-  
-  input.progress-bar[type="range"]::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    width: 16px;
-    height: 16px;
-    border-radius: 50%;
-    background: #2196F3;
-    margin-top: -5.5px;
-    transition: transform 0.2s ease;
-  }
-  
-  /* Firefox浏览器样式 */
-  input.progress-bar[type="range"]::-moz-range-track {
-    height: 5px;
-    border-radius: 2px;
-    background: linear-gradient(to right, #2196F3 var(--progress, 0%), #ddd 0);
-  }
-  
-  input.progress-bar[type="range"]::-moz-range-thumb {
-    width: 16px;
-    height: 16px;
-    border-radius: 50%;
-    background: #2196F3;
-    border: none;
-    transition: transform 0.2s ease;
-  }
-  
-  input.progress-bar[type="range"]::-webkit-slider-thumb:hover {
-    transform: scale(1.1);
-  }
-  
-  input.progress-bar[type="range"]::-moz-range-thumb:hover {
-    transform: scale(1.1);
-  }
+.progress-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 4px 0;
+  color: var(--text-subdued);
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+}
+
+input.progress-bar[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  flex: 1;
+  height: 4px;
+  background: transparent;
+  cursor: pointer;
+  border-radius: 2px;
+}
+
+input.progress-bar[type="range"]::-webkit-slider-runnable-track {
+  height: 4px;
+  border-radius: 2px;
+  background: linear-gradient(
+    to right,
+    var(--accent-primary) var(--progress, 0%),
+    var(--bg-highlight) var(--progress, 0%)
+  );
+  transition: height var(--transition-fast);
+}
+
+input.progress-bar[type="range"]:hover::-webkit-slider-runnable-track {
+  height: 6px;
+}
+
+input.progress-bar[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 0;
+  height: 0;
+  background: var(--text-primary);
+  border-radius: var(--radius-full);
+  margin-top: -4px;
+  transition: all var(--transition-fast);
+  box-shadow: var(--shadow-sm);
+}
+
+input.progress-bar[type="range"]:hover::-webkit-slider-thumb {
+  width: 12px;
+  height: 12px;
+  margin-top: -3px;
+}
+
+/* Firefox */
+input.progress-bar[type="range"]::-moz-range-track {
+  height: 4px;
+  border-radius: 2px;
+  background: linear-gradient(
+    to right,
+    var(--accent-primary) var(--progress, 0%),
+    var(--bg-highlight) var(--progress, 0%)
+  );
+}
+
+input.progress-bar[type="range"]::-moz-range-thumb {
+  width: 0;
+  height: 0;
+  background: var(--text-primary);
+  border: none;
+  border-radius: var(--radius-full);
+  transition: all var(--transition-fast);
+}
+
+input.progress-bar[type="range"]:hover::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+}

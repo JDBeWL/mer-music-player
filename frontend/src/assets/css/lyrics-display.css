@@ -1,89 +1,114 @@
 .lyrics-wrapper {
-    width: 100%;
-    max-width: 100%;
-    overflow: hidden;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.lyrics-display {
+  height: 100%;
+  padding: 16px 8px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: none;
+  scroll-behavior: smooth;
+  will-change: scroll-position;
+}
+
+.lyrics-display::-webkit-scrollbar {
+  width: 0;
 }
 
 .loading,
 .no-lyrics {
-    color: #888;
-    font-size: 16px;
-    text-align: center;
-    padding: 25%;
+  color: var(--text-subdued);
+  font-size: 1rem;
+  text-align: center;
+  padding: 30% 20px;
 }
 
 .lyrics {
-    margin: 6px 0;
-    padding: 12px 20px 12px 12px;
-    font-size: 18px;
-    transition: all 0.18s ease;
-    transform-origin: left center;
-    word-break: break-word;
-    max-width: calc((100% - 4px) / 1.1);
-    min-height: 1.2em;
+  padding: 16px 20px;
+  margin: 4px 0;
+  font-size: 1.5rem;
+  font-weight: 500;
+  color: var(--text-subdued);
+  line-height: 1.6;
+  border-radius: var(--radius-md);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  word-break: break-word;
+  will-change: transform, font-size, color;
 }
+
+.lyrics:hover {
+  color: var(--text-secondary);
+}
+
 .lyrics.active {
-    transform: translateX(4px) scale(1.1);
-    border-radius: 12px;
-    font-size: 18px;
-    font-weight: bold;
-    color: #2196f3;
-    background: rgba(43, 174, 210, 0.1);
-    position: relative;
-    z-index: 1;
+  color: var(--text-primary);
+  font-size: 1.8rem;
+  font-weight: 700;
+  background: rgba(255, 255, 255, 0.05);
+  transform: translateX(8px);
 }
 
 .lyrics p {
-    margin: 0;
-    line-height: 1.6;
-    padding: 4px 0;
-}
-.lyrics.active p {
-    color: #2baed2;
+  margin: 0;
+  padding: 4px 0;
 }
 
-.lyrics .english {
-    font-size: 1.1em;
-    /* margin-bottom: 4px; */
-}
-.lyrics .chinese {
-    font-size: 0.9em;
-    /* color: #888; */
-    /* margin-top: 4px; */
+.lyrics .first-line {
+  font-size: inherit;
 }
 
-.lyrics.active .english {
-    color: #2baed2;
-    font-size: 1.1em;
-}
-.lyrics.active .chinese {
-    color: #2baed2;
-    font-size: 1em;
+.lyrics .last-line {
+  font-size: 0.85em;
+  opacity: 0.7;
+  margin-top: 4px;
 }
 
-.lyrics-display {
-    height: 100%;
-    padding: 8px;
-    flex: 1;
-    overflow-y: auto;
-    overflow-x: hidden;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-    position: relative;
-    scroll-behavior: smooth;
+.lyrics.active .first-line {
+  color: var(--accent-primary);
 }
 
-.lyrics-display::-webkit-scrollbar {
-    width: 0;
-    height: 0;
-    background: transparent;
+.lyrics.active .last-line {
+  color: var(--accent-primary);
+  opacity: 0.8;
 }
 
+/* 卡拉OK效果 */
 .karaoke-text {
-    color: #888;
-    transition: color 0.2s linear;
-}
-.karaoke-text.active {
-    color: #2baed2;
+  position: relative;
+  display: inline;
+  color: transparent;
+  transition: none;
 }
 
+.karaoke-text::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  color: var(--text-subdued);
+  white-space: pre;
+  pointer-events: none;
+}
+
+.karaoke-text::before {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: var(--progress, 0%);
+  color: var(--accent-primary);
+  overflow: hidden;
+  white-space: pre;
+  transition: width 0.05s linear;
+  will-change: width;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.karaoke-text.active::after {
+  color: var(--accent-primary);
+}
